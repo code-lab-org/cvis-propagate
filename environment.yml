@@ -1,0 +1,13 @@
+name: cvis-propagate
+
+dependencies:
+- conda-forge::orekit
+- flask
+- isodate
+- numpy
+- pandas
+- python=3.7
+- python-dotenv
+- scipy
+- setuptools
+- waitress

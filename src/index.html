@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en" class="bg-light">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Constellation Visualization (CVIS)">
+    <meta name="author" content="Stevens Institute of Technology">
+    <!--<link rel="icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">-->
+    <title>CVIS</title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top py-2">
+      <a class="navbar-brand" href="/"><!--<img src="images/cvis.png" width="30" height="30" alt="" />--> CVIS</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav text-center">
+          <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
+        </ul>
+      </div>
+    </nav>
+    <main class="container-fluid p-0">
+      <div style="width:100%;height:40rem;" id="cesiumContainer"></div>
+      <div class="p-4">
+        <div class="form-group row">
+          <div class="col-lg-3 row">
+            <label for="spacecraftList" class="text-right col-lg-4">Spacecraft:</label>
+            <div class="col-lg-8">
+              <select class="custom-select" size="4" id="spacecraftList"></select>
+              <div class="btn-group" role="group">
+                <div class="input-group-prepend">
+                  <button type="button" class="btn btn-secondary" title="Add" aria-label="Add Spacecraft" id="spacecraftAdd"><span class="fa fa-plus" aria-hidden="true"></span></button>
+                  <button type="button" class="btn btn-secondary" disabled title="Copy" aria-label="Copy Spacecraft" id="spacecraftCopy"><span class="fa fa-copy" aria-hidden="true"></span></button>
+                  <button type="button" class="btn btn-secondary" disabled title="Remove" aria-label="Remove Spacecraft" id="spacecraftRemove"><span class="fa fa-minus" aria-hidden="true"></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <nav>
+              <div class="nav nav-tabs" role="tablist">
+                <a class="nav-item nav-link active" id="nav-inputs-tab" data-toggle="tab" href="#nav-inputs" role="tab" aria-controls="nav-inputs" aria-selected="true">Inputs</a>
+                <a class="nav-item nav-link" id="nav-outputs-tab" data-toggle="tab" href="#nav-outputs" role="tab" aria-controls="nav-outputs" aria-selected="false">Outputs</a>
+              </div>
+            </nav>
+            <div class="tab-content p-2 border border-top-0 rounded-bottom">
+              <div class="tab-pane fade show active container-fluid" id="nav-inputs" role="tabpanel" aria-labelledby="nav-info-tab">
+                <div class="form-group row">
+                  <label for="spacecraftLabel" class="col-form-label text-right col-1">Label:</label>
+                  <div class="col-5"><input type="text" class="form-control" disabled id="spacecraftLabel" /></div>
+                    <label for="spacecraftColor" class="col-form-label text-right col-1">Color:</label>
+                    <div class="col-5"><input type="color" class="form-control" disabled id="spacecraftColor" /></div>
+                </div>
+                <div class="row">
+                  <div class="text-right col-1">Orbit:</div>
+                  <div class="col-11">
+                    <nav>
+                      <div class="nav nav-tabs" id="nav-orbits" role="tablist">
+                        <a class="nav-item nav-link active disabled" id="nav-tle-tab" data-toggle="tab" href="#nav-tle" role="tab" aria-controls="nav-tle" aria-selected="true" aria-disabled="true">TLE</a>
+                        <a class="nav-item nav-link disabled" id="nav-keplerian-tab" data-toggle="tab" href="#nav-keplerian" role="tab" aria-controls="nav-keplerian" aria-selected="false" aria-disabled="true">Keplerian</a>
+                      </div>
+                    </nav>
+                    <div class="tab-content p-2 border border-top-0 rounded-bottom" id="nav-orbitContent">
+                      <div class="tab-pane fade show active container-fluid" id="nav-tle" role="tabpanel" aria-labelledby="nav-tle-tab">
+                        <div class="form-group row">
+                          <label for="spacecraftTLE" class="col-form-label text-right col-1"><abbr title="two line elements">TLE</abbr>:</label>
+                          <div class="col-10"><textarea class="form-control text-monospace" rows="2" disabled id="spacecraftTLE"></textarea></div>
+                          <button type="button" class="btn btn-secondary col-1" disabled id="convertTLE">Convert to Keplerian</button>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade container-fluid" id="nav-keplerian" role="tabpanel" aria-labelledby="nav-keplerian-tab">
+                        <div class="form-group row">
+                          <label for="orbitAltitude" class="col-form-label text-right col-2">Altitude:</label>
+                          <div class="input-group col-2 p-0">
+                            <input type="number" class="form-control" min="0" step="any" required disabled id="orbitAltitude" />
+                            <div class="input-group-append">
+                              <span class="input-group-text"><abbr title="kilometers">km</abbr></span>
+                            </div>
+                          </div>
+                          <label for="orbitInclination" class="col-form-label text-right col-2">Inclination:</label>
+                          <div class="input-group col-2 p-0">
+                            <input type="number" class="form-control" min="-180" max="180" step="any" disabled id="orbitInclination" />
+                            <div class="input-group-append">
+                              <span class="input-group-text"><abbr title="degrees">&deg;</abbr></span>
+                            </div>
+                          </div>
+                          <label for="orbitEccentricity" class="col-form-label text-right col-2">Eccentricity:</label>
+                          <input type="number" class="form-control col-2" min="0" step="any" disabled id="orbitEccentricity" />
+                        </div>
+                        <div class="form-group row">
+                          <label for="orbitPerigeeArgument" class="col-form-label text-right col-2">Perigee Argument:</label>
+                          <div class="input-group col-2 p-0">
+                            <input type="number" class="form-control" min="-360" max="360" step="any" disabled id="orbitPerigeeArgument" />
+                            <div class="input-group-append">
+                              <span class="input-group-text"><abbr title="degrees">&deg;</abbr></span>
+                            </div>
+                          </div>
+                          <label for="orbitRightAscensionOfAscendingNode" class="col-form-label text-right col-2"><abbr title="right ascension of ascending node">RAAN</abbr>:</label>
+                          <div class="input-group col-2 p-0">
+                            <input type="number" class="form-control" min="-360" max="360" step="any" disabled id="orbitRightAscensionOfAscendingNode" />
+                            <div class="input-group-append">
+                              <span class="input-group-text"><abbr title="degrees">&deg;</abbr></span>
+                            </div>
+                          </div>
+                          <label for="orbitTrueAnomaly" class="col-form-label text-right col-2">True Anomaly:</label>
+                          <div class="input-group col-2 p-0">
+                            <input type="number" class="form-control" min="-360" max="360" step="any" disabled id="orbitTrueAnomaly" />
+                            <div class="input-group-append">
+                              <span class="input-group-text"><abbr title="degrees">&deg;</abbr></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="orbitDateInput" class="col-form-label col-2 text-right">Epoch (<abbr title="Universal Coordinated Time">UTC</abbr>):</label>
+                          <div class="input-group date col-4 p-0" id="orbitDate" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" id="orbitDateInput" disabled data-target="#animationStart"/>
+                            <div class="input-group-append" data-target="#orbitDate" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="text-right col-2">Non-Keplerian:</div>
+                          <div class="custom-control custom-switch col-2">
+                            <input type="checkbox" class="custom-control-input" disabled id="orbitHarmonics">
+                            <label class="custom-control-label" for="orbitHarmonics">Spherical Harmonics</label>
+                          </div>
+                          <label for="orbitHarmonicsDegree" class="col-form-label text-right col-2 orbitHarmonicsDegreeOrder" style="display:none;">Degree:</label>
+                          <input type="number" class="form-control col-2 orbitHarmonicsDegreeOrder" min="6" max="240" disabled id="orbitHarmonicsDegree" style="display:none;" />
+                          <label for="orbitHarmonicsOrder" class="col-form-label text-right col-2 orbitHarmonicsDegreeOrder" style="display:none;">Order:</label>
+                          <input type="number" class="form-control col-2 orbitHarmonicsDegreeOrder" min="6" max="240" disabled id="orbitHarmonicsOrder" style="display:none;" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="nav-outputs" role="tabpanel" aria-labelledby="nav-outputs-tab">
+                <div class="overflow-auto" style="max-height:20em;">
+                  <table class="table small" id="spacecraftTrajectory">
+                    <thead>
+                      <tr>
+                        <th scope="col">Time</th>
+                        <th scope="col">Lat. (<abbr title="degrees">&deg;</abbr>)</th>
+                        <th scope="col">Lon. (<abbr title="degrees">&deg;</abbr>)</th>
+                        <th scope="col">Alt. (<abbr title="meters">m</abbr>)</th>
+                        <th scope="col">X (<abbr title="meters">m</abbr>)</th>
+                        <th scope="col">Y (<abbr title="meters">m</abbr>)</th>
+                        <th scope="col">Z (<abbr title="meters">m</abbr>)</th>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                  <div style="position:absolute;right:0;bottom:0;">
+                    <a href="#" id="trajectoryJSON" class="btn btn-secondary disabled" role="button" download="trajectory.json">
+                      <span class="fa fa-download" aria-hidden="true"></span> JSON
+                    </a>
+                    <a href="#" id="trajectoryCSV" class="btn btn-secondary disabled" role="button" download="trajectory.csv">
+                      <span class="fa fa-download" aria-hidden="true"></span> CSV
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="startDateInput" class="col-form-label col-lg-1 text-right">Start (<abbr title="Universal Coordinated Time">UTC</abbr>):</label>
+          <div class="input-group date col-lg-2 p-0" id="startDate" data-target-input="nearest">
+            <input type="text" class="form-control datetimepicker-input" id="startDateInput" data-target="#startDate"/>
+            <div class="input-group-append" data-target="#startDate" data-toggle="datetimepicker">
+              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+          </div>
+          <label for="duration" class="col-form-label col-lg-1 text-right">Duration:</label>
+          <div class="input-group col-lg-2 p-0">
+            <input type="number" class="form-control" min="0" step="any" id="duration" />
+            <div class="input-group-append">
+              <span class="input-group-text">days</span>
+            </div>
+          </div>
+          <label for="timeStep" class="col-form-label col-lg-1 text-right">Time Step:</label>
+          <div class="input-group col-lg-2 p-0">
+            <input type="number" class="form-control" min="1" id="timeStep" />
+            <div class="input-group-append">
+              <span class="input-group-text">seconds</span>
+            </div>
+          </div>
+          <div class="col-lg-1"></div>
+          <button type="button" class="btn btn-primary col-lg-2" id="execute">Execute</button>
+        </div>
+        <div class="form-group row">
+          <label for="observerReferenceFrame" class="col-form-label col-lg-1 text-right">Observer:</label>
+          <select class="form-control col-lg-2" id="observerReferenceFrame">
+            <option value="fixed" selected>Earth-centered Fixed Frame</option>
+            <option value="inertial">Earth-centered Inertial Frame</option>
+          </select>
+          <label for="animationStartInput" class="col-form-label col-lg-1 text-right">Start (<abbr title="Universal Coordinated Time">UTC</abbr>):</label>
+          <div class="input-group date col-lg-2 p-0" id="animationStart" data-target-input="nearest">
+            <input type="text" class="form-control datetimepicker-input" id="animationStartInput" data-target="#animationStart"/>
+            <div class="input-group-append" data-target="#animationStart" data-toggle="datetimepicker">
+              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+          </div>
+          <label for="animationEndInput" class="col-form-label col-lg-1 text-right">End (<abbr title="Universal Coordinated Time">UTC</abbr>):</label>
+          <div class="input-group date col-lg-2 p-0" id="animationEnd" data-target-input="nearest">
+            <input type="text" class="form-control datetimepicker-input" id="animationStartInput" data-target="#animationEnd"/>
+            <div class="input-group-append" data-target="#animationEnd" data-toggle="datetimepicker">
+              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+          </div>
+          <label for="trailTime" class="col-form-label col-lg-1 text-right">Trail Time:</label>
+          <div class="input-group col-lg-2 p-0">
+            <input type="number" class="form-control" min="0" step="any" id="trailTime" />
+            <div class="input-group-append">
+              <span class="input-group-text">hours</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-10"></div>
+          <button type="button" class="btn btn-secondary col-lg-2" id="animate">
+            <span class="fa fa-sync" aria-hidden="true"></span> Update
+          </button>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer bg-light text-center border-top border-dark">
+      <p><small class="text-muted">&copy; 2020 Collective Design Lab, Stevens Institute of Technology</small></p>
+    </footer>
+  </body>
+</html>
