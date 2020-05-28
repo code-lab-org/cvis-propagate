@@ -1,15 +1,15 @@
 # Constellation Visualization and Propagation (cvis-propagate)
 
-This application propagates and visualizes the orbits of satellites in a constellation. It uses the (Orekit)[https://www.orekit.org/] flight dynamics library to perform orbital propagation and the (CesiumJS)[https://cesium.com/cesiumjs/] library to provide visualization.
+This application propagates and visualizes the orbits of satellites in a constellation. It uses the [Orekit](https://www.orekit.org/) flight dynamics library to perform orbital propagation and the [CesiumJS](https://cesium.com/cesiumjs/) library to provide visualization.
 
 CVIS is structured as a service-oriented architecture with frontend and backend components. The frontend component is a HTML/JavaScript webpage that provides a browser-based Graphical User Interface (GUI). It interacts with the backend component via RESTful HTTP requests. The backend component is a Python web server that serves the frontend component and performs the orbital propagation calculations.
 
 ## Getting Started
 
-CVIS visualization capabilities require a personal Cesium ion API key specified in the environment variable `CESIUM_TOKEN`, conveniently included as a line in the `.env` configuration file. You can register to receive a free API token at (Cesium ion)[https://cesium.com/ion].
+CVIS visualization capabilities require a personal Cesium ion API key specified in the environment variable `CESIUM_TOKEN`, conveniently included as a line in the `.env` configuration file. You can register to receive a free API token at [Cesium ion](https://cesium.com/ion).
 
 Additionally, the application is configured to use the free "Blue Marble Next Generation July, 2004" imagery, rather than the default Bing Maps imagery, which has severe access restrictions without a Bing maps API key. To enable this imagery:
- * Sign in to your (Cesium ion)[https://cesium.com/ion] account
+ * Sign in to your [Cesium](https://cesium.com/ion) account
  * Navigate to the "Asset Depot" tab
  * Search for "Blue Marble Next Generation July, 2004"
  * Click the "+" icon to add it to your Asset Depot
@@ -32,7 +32,7 @@ To start the application, launch the Python server from the project root as foll
 ```shell
 npm start
 ```
-the resulting service will be accessible at [http://localhost:5001]. Application configuration options are available in the `.env` file:
+the resulting service will be accessible at [http://localhost:5001](). Application configuration options are available in the `.env` file:
 ```shell
 CVIS_HOST=0.0.0.0
 CVIS_PORT=5001
@@ -46,7 +46,7 @@ To facilitate the deployment, a Dockerfile has also been provided, and can be ru
 docker build --tag cvis-propagate .
 docker run --publish 80:5001 cvis-propagate
 ```
-where the flag `--publish 80:5001` redirects traffic on port 80 to the container's port 5001. The resulting service will be accessible at [http://localhost:80]. Application configuration options are available in the `.env` file:
+where the flag `--publish 80:5001` redirects traffic on port 80 to the container's port 5001. The resulting service will be accessible at [http://localhost:80](). Application configuration options are available in the `.env` file:
 ```shell
 CVIS_HOST=0.0.0.0
 CVIS_PORT=5001

@@ -4,7 +4,6 @@
   "description": "Constellation Visualization (CVIS)",
   "author": "Collective Design Lab, Stevens Institute of Technology",
   "license": "Apache-2.0",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/code-lab-org/cvis-propagate"
