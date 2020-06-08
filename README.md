@@ -6,7 +6,7 @@ CVIS is structured as a service-oriented architecture with frontend and backend 
 
 ## Getting Started
 
-CVIS visualization capabilities require a personal Cesium ion API key specified in the environment variable `CESIUM_TOKEN`, conveniently included as a line in the `.env` configuration file. You can register to receive a free API token at [Cesium ion](https://cesium.com/ion).
+CVIS visualization capabilities require a personal Cesium ion API key specified in the environment variable `CESIUM_API_KEY`, conveniently included as a line in the `.env` configuration file. You can register to receive a free API token at [Cesium ion](https://cesium.com/ion).
 
 Additionally, the application is configured to use the free "Blue Marble Next Generation July, 2004" imagery, rather than the default Bing Maps imagery, which has severe access restrictions without a Bing maps API key. To enable this imagery:
  * Sign in to your [Cesium](https://cesium.com/ion) account
