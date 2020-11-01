@@ -48,55 +48,36 @@ $(document).ready(function() {
   $("#orbitDate").datetimepicker({
     timeZone: "UTC"
   });
+
+  var initEpoch = moment.utc("2020-03-05T12:00:00.0Z");
+  var initDuration = 0.5;
+
   $("#startDate").datetimepicker({
-    date: moment.utc("2020-03-05T12:00:00.0Z"),
+    date: initEpoch.clone(),
     timeZone: "UTC"
   });
-  $("#duration").val(0.5);
+  $("#duration").val(initDuration);
   $("#seed").val(0);
   $("#timeStep").val(600);
   $("#animationStart").datetimepicker({
-    date: $("#startDate").datetimepicker("date"),
-    minDate: $("#startDate").datetimepicker("date"),
-    maxDate: $("#startDate").datetimepicker("date").add(parseFloat($("#duration").val())*24*60*60, 'seconds'),
+    date: initEpoch.clone(),
     timeZone: "UTC"
   });
   $("#animationEnd").datetimepicker({
-    date: $("#startDate").datetimepicker("date").add(parseFloat($("#duration").val())*24*60*60, 'seconds'),
-    minDate: $("#startDate").datetimepicker("date"),
-    maxDate: $("#startDate").datetimepicker("date").add(parseFloat($("#duration").val())*24*60*60, 'seconds'),
+    date: initEpoch.clone().add(initDuration, 'days'),
     timeZone: "UTC"
   });
   $("#trailTime").val(6);
 
-  $("#startDate").on("change.datetimepicker", function(e) {
-    var endDate = e.date.clone().add(parseFloat($("#duration").val())*24*60*60, 'seconds');
-    var diff = e.date.clone().diff(e.oldDate);
-    $("#animationStart").datetimepicker("minDate", false);
-    $("#animationStart").datetimepicker("maxDate", false);
-    $("#animationEnd").datetimepicker("minDate", false);
-    $("#animationEnd").datetimepicker("maxDate", false);
-
-    $("#animationStart").datetimepicker("date", $("#animationStart").datetimepicker("date").add(diff));
-    $("#animationEnd").datetimepicker("date", $("#animationEnd").datetimepicker("date").add(diff));
-
-    $("#animationStart").datetimepicker("minDate", e.date);
-    $("#animationEnd").datetimepicker("minDate", $("#animationStart").datetimepicker("date"));
-    $("#animationStart").datetimepicker("maxDate", $("#animationEnd").datetimepicker("date"));
-    $("#animationEnd").datetimepicker("maxDate", endDate);
-  });
-  $("#duration").change(function() {
-    var endDate = $("#animationStart").datetimepicker("date").add(parseFloat($("#duration").val())*24*60*60, 'seconds');
-    $("#animationEnd").datetimepicker("maxDate", false);
-    $("#animationEnd").datetimepicker("date", endDate);
-    $("#animationEnd").datetimepicker("maxDate", endDate);
-  });
-  $("#animationStart").on("change.datetimepicker", function(e) {
-    $("#animationEnd").datetimepicker('minDate', e.date);
-  });
-  $("#animationEnd").on("change.datetimepicker", function(e) {
-    $("#animationStart").datetimepicker('maxDate', e.date);
-  });
+  function updateAnimationDate() {
+      var startDate = moment($("#startDate").datetimepicker("date"));
+      var duration = parseFloat($("#duration").val());
+      var endDate = startDate.clone().add(duration, 'days');
+      $("#animationStart").datetimepicker("date", startDate);
+      $("#animationEnd").datetimepicker("date", endDate);
+  }
+  $("#startDate").on("change.datetimepicker", updateAnimationDate);
+  $("#duration").change(updateAnimationDate);
 
   function setUpOrbitPanel(orbit) {
       if(orbit.hasOwnProperty("date")) {
