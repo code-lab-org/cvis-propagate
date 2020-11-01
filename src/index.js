@@ -132,8 +132,6 @@ $(document).ready(function() {
       $("#nav-keplerian-tab").tab("show");
       $("#nav-tle-tab").addClass("disabled");
     } else {
-      $("#nav-keplerian-tab").removeClass("disabled");
-      $("#nav-tle-tab").removeClass("disabled");
       $("#spacecraftTLE").val("");
       $("#orbitDate").datetimepicker("date", null);
       $("#orbitAltitude").val("");
@@ -143,6 +141,9 @@ $(document).ready(function() {
       $("#orbitRightAscensionOfAscendingNode").val("");
       $("#orbitTrueAnomaly").val("");
       $("#orbitHarmonics").prop("checked", false);
+      $("#spacecraftList option:selected").data("orbit", null);
+      $("#nav-keplerian-tab").removeClass("disabled");
+      $("#nav-tle-tab").removeClass("disabled");
     }
     $("#spacecraftTrajectory tbody").empty();
     if($(this).find(":selected").data("history")) {
