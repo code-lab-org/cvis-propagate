@@ -27,7 +27,7 @@
     "cesium": "^1.69.0",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "jquery": "^3.5.1",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.0",
     "moment": "^2.29.2",
     "moment-timezone": "^0.5.31",
     "@popperjs/core": "^2.4.0",
